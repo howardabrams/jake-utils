@@ -69,9 +69,9 @@ function start(msg) {
         msg = utils.format(msg, arguments[i]);
     }
 
-    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", blue));
-    echo (color(msg, blue));
-    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", blue));
+    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", "blue"));
+    echo (color(msg, "blue"));
+    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", "blue"));
     echo ("");
 }
 global['start'] = start;
@@ -91,7 +91,7 @@ function end(msg) {
         for( var i = 1; i < arguments.length; i++ ) {
             msg = utils.format(msg, arguments[i]);
         }
-        echo ( color(msg, bold) );
+        echo ( color(msg, 'bold') );
     }
     echo ("");
 }
