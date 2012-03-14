@@ -1,0 +1,19 @@
+{
+    "name": "jake-utils",
+    "description": "Functions for making jake a little nicer",
+    "version": "0.0.1",
+    "private": false,
+    "keywords": [
+        "jake",
+        "build"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git@github.com/howardabrams/jake-utils.git"
+    },
+    "devDependencies": {
+        "shelljs": "latest",
+        "ansi-color": ">=0.2.1"
+    },
+    "author": "Howard Abrams (http://www.github.com/howardabrams)"
+}
