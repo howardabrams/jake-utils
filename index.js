@@ -14,6 +14,7 @@ var color = require('ansi-color').set;
 
 require('./mocha');
 require('./jscoverage');
+require('./lint');
 
 /**
  * Gathers up a list of files and returns them in an array.
