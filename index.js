@@ -4,6 +4,13 @@
  */
 require('shelljs/global');
 
+var util   = require('util');
+var tty    = require('tty');
+var cp     = require('child_process');
+var fs     = require('fs');
+var path   = require('path');
+var Sync   = require('sync');
+
 var color = require('ansi-color').set;
 
 /**
@@ -16,8 +23,8 @@ var color = require('ansi-color').set;
  * @param {String} files A collection of glob patterns for files
  * @returns {Array} list of files 
  */
-function files() {
-    return keysToArray ( ls(arguments) );
+function files(fileglob) {
+    return keysToArray ( ls(fileglob) );
 }
 global['files'] = files;
 
@@ -32,8 +39,8 @@ global['files'] = files;
  * @param {String} files A collection of glob patterns for files
  * @returns {Array} list of files 
  */
-function filesAll(glob) {
-    return keysToArray ( ls('-R', arguments) );
+function filesAll(fileglob) {
+    return keysToArray ( ls('-R', fileglob) );
 }
 global['allFiles'] = files;
 
@@ -66,7 +73,7 @@ function keysToArray(obj) {
  */
 function start(msg) {
     for( var i = 1; i < arguments.length; i++ ) {
-        msg = utils.format(msg, arguments[i]);
+        msg = util.format(msg, arguments[i]);
     }
 
     echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", "blue"));
@@ -89,7 +96,7 @@ global['start'] = start;
 function end(msg) {
     if (msg) {
         for( var i = 1; i < arguments.length; i++ ) {
-            msg = utils.format(msg, arguments[i]);
+            msg = util.format(msg, arguments[i]);
         }
         echo ( color(msg, 'bold') );
     }
@@ -97,35 +104,182 @@ function end(msg) {
 }
 global['end'] = end;
 
+/**
+ * Runs Mocha tests.
+ *
+ * This function either takes individual, ordered parameters, or it expects
+ * the first parameter to be an object containing _named parameters_. These
+ * are described in the **Options** section below.
+ * 
+ * ### Options:
+ *
+ *  - `files`- Either a glob expression or an array of files.
+ *  - `test`- A regular expression to limit what tests are run.
+ *  - `coverage`- Boolean. If true, will use code coverage libraries. Defaults to `false`.
+ *  - `reporter`- The reporting output to use. Defaults to `spec`.
+ *      - `spec` - Good output for command line usage
+ *      - `tap` - Report used by Jenkins
+ *      - `html-cov` - Report showing the code coverage
+ *  - `output` - Optional file that specifies the file to contain the output results.
+ *
+ * @param {String, Array} files  List of test script files
+ * @param {Boolean} coverage If true, will use code coverage libraries. Defaults to `false`.
+ * @param {String} reporter The reporting output to use. Defaults to `spec`.
+ * @param {String} output specifies the file to contain the output results (Optional).
+ */
+function mochaTests ( files, test, coverage, reporter, output ) {
+    var args = [ "--ui",  "tdd" ];
+    
+    // If the `files` parameter was an object, then assign
+    // the named parameter to the positional parameter, test.
+    if ( files.test ) {
+        test = files.test;
+    }
+    if (test) {
+        args.push("--grep");
+        args.push(test);
+    }
+
+    if ( files.coverage ) {
+        coverage = files.coverage;
+        process.env.COVLIB = "true";
+    }
+    if ( files.reporter ) {
+        reporter = files.reporter;
+    }
+    if (! reporter) {
+        reporter = "spec";
+    }
+    args.push("--reporter");
+    args.push(reporter);
+    
+    if ( files.output ) {
+        output = files.output;
+    }
+    // Now that we re-assigned all of the named parameters
+    // we can do the `files` property last and overwrite the
+    // `files` object to just the String or Array of files.
+    if ( files.files ) {
+        files = files.files;
+    }
+    
+    // Let's convert the files that were given into a single
+    // string with each file separated by a space:
+    if (! util.isArray(files)) {
+        files = allFiles( files );
+    }
+    for ( file in files ) {
+        args.push(files[file]);
+    }
+    
+    cmdSync("mocha", args, output);
+}
+global['mochaTests'] = mochaTests;
+
 
 /**
- * Executes a command synchronously and also allows pipes.
- *
- * @param {String} execcmd A string containing the details to exec. Can take %s arguments.
+ * Executes a shell command line, and allows `%s` substitutions.
+ * 
+ * This is a synchronous `exec` command, but the function takes
+ * multiple parameters that are substituted into the string, for
+ * instance:
+ * 
+ *     exec2("ls %s > %s", '*.js', 'output.txt');
+ *     
+ * @param execcmd The command string to execute.
  */
-function cmd(execcmd) {
+function exec2(execcmd) {
     for( var i = 1; i < arguments.length; i++ ) {
-        execcmd = utils.format(execcmd, arguments[i]);
+        execcmd = util.format(execcmd, arguments[i]);
     }
     echo(execcmd);
- 
-    var results = null;
+    exec(execcmd);
+}
+
+/**
+ * Executes a command asynchronously to an output file.
+ * 
+ * **Note:** If the `output` isn't given, the output from the command
+ * is sent to the console.
+ * 
+ * @param {String} command The executable file to run
+ * @param {Array} args the arguments to pass to the executable
+ * @param {String} output The file to write the stdout results
+ * @param {Function} callback Called when the process completes
+ */
+function cmd(command, args, output, callback) {
+    // console.log("$ %s %s", command, args.join(" "));
+    
+    var child = null;
+    var buf = '';
     try {
-        while (!results) {
-            cpexec(execcmd, function(code, stdout, stderr) {
-                if (code !== 0) {
-                    results = stderr;
-                    echo(stdout);
-                    echo(stderr);
-                    exit(code);
-                }
-            });
-        }
+        var opts = {
+                env: process.env
+        };
+        child = cp.spawn(command, args, opts);
+        
+        child.stdout.setEncoding('utf8');
+        child.stderr.setEncoding('utf8');
     }
     catch (err) {
-        if (err.errno !== 'EMFILE') {
-            console.warn(err);
-        }
+        console.warn(err);
+        exit(1);
     }
+    
+    child.stdout.on('data', function (data) {
+        buf += data;
+    });
+    
+    child.stderr.on('data', function (data) {
+        console.warn(data);
+    });
+    
+    child.on('exit', function (code, signal) {
+        if (output) {
+            fs.writeFileSync(output, buf, 'utf8');
+        }
+        else {
+            console.log(buf);
+        }
+        
+        if (callback) {
+            callback(buf);
+        }
+    });
 }
 global['cmd'] = cmd;
+
+/**
+ * Similar to `cmd` but runs blocks until complete.
+ * 
+ * Using the `Sync` module. **Currently, this doesn't block.**
+ *
+ * @param {String} command The executable file to run
+ * @param {Array} args the arguments to pass to the executable
+ * @param {String} output The file to write the stdout results
+ */
+function cmdSync(command, args, output) {
+    
+    var cmdstr = command + ' ' + args.join(" ");
+    console.log(cmdstr);
+    
+    Sync(function(){
+        var opts = {
+                env: process.env
+        };
+        cp.exec.sync(null, cmdstr, opts, function(error, stdout, stderr) {
+            if (output) {
+                fs.writeFileSync(output, stdout);
+            }
+            else {
+                console.log(stdout);
+            }
+            console.warn(stderr);
+
+            if (error !== null) {
+              console.warn('Error: ' + error);
+              exit(error.code);
+            }
+        });
+    });
+}
