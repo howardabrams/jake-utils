@@ -78,10 +78,17 @@ function start(msg) {
     for( var i = 1; i < arguments.length; i++ ) {
         msg = util.format(msg, arguments[i]);
     }
-
-    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", "blue"));
-    echo (color(msg, "blue"));
-    echo (color("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-", "blue"));
+    var line = "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-";
+    if ( tty.isatty(process.stdin) ) {
+        echo (color(line, "blue"));
+        echo (color(msg,  "blue"));
+        echo (color(line, "blue"));
+    }
+    else {
+        echo (line);
+        echo (msg);
+        echo (line);
+    }
     echo ("");
 }
 global['start'] = start;
@@ -101,7 +108,12 @@ function end(msg) {
         for( var i = 1; i < arguments.length; i++ ) {
             msg = util.format(msg, arguments[i]);
         }
-        echo ( color(msg, 'bold') );
+        if ( tty.isatty(process.stdin) ) {
+            echo ( color(msg, 'bold') );
+        }
+        else {
+            echo (msg);
+        }
     }
     echo ("");
 }
