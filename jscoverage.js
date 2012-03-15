@@ -28,9 +28,15 @@ function jscoverage ( src, dest ) {
 
     if ( util.isArray(src) ) {
         for (s in src) {
-            var d = path.join(dest, src[s]);
-            mkdir(d);
-            cmd("node-jscoverage", [ src[s], d ]);
+            var dirname = src[s];
+            var dirdest = path.join(dest, dirname);
+
+            if ( exists(dirdest) ) {
+                rm ('-rf', dirdest);
+            }
+            mkdir(dirdest);
+
+            cmd("node-jscoverage", [ '-v', dirname, dirdest ]);
         }
     }
     else {
