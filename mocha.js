@@ -53,17 +53,22 @@ function mochaTests ( files, test, coverage, reporter, output ) {
     if ( files.output ) {
         output = files.output;
     }
-    // Now that we re-assigned all of the named parameters
-    // we can do the `files` property last and overwrite the
-    // `files` object to just the String or Array of files.
-    if ( files.files ) {
+    
+    if ( files.directory ) {
+        files = findFiles( files.directory, files.files );
+        console.log(files);
+    }
+    else if ( files.files ) {
+        // Now that we re-assigned all of the named parameters
+        // we can do the `files` property last and overwrite the
+        // `files` object to just the String or Array of files.
         files = files.files;
     }
     
     // Let's convert the files that were given into a single
     // string with each file separated by a space:
     if (! util.isArray(files)) {
-        files = allFiles( files );
+        files = findFiles( files );
     }
     for ( file in files ) {
         args.push(files[file]);

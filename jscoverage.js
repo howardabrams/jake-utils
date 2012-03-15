@@ -1,4 +1,5 @@
 var util = require('util');
+var path = require('path');
 
 /**
  * Create a JavaScript code coverage-able libraries using `node-jscoverage`.
@@ -19,18 +20,22 @@ function jscoverage ( src, dest ) {
     if ( src.src ) {
         src = src.src;
     }
-    if ( !util.isArray(src) ) {
-        src = [ src ];
-    }
     
     if ( exists(dest) ) {
         rm ('-rf', dest);
     }
     mkdir(dest);
-    
-    for (s in src) {
-        cmd("node-jscoverage", [ src[s], dest ]);
+
+    if ( util.isArray(src) ) {
+        for (s in src) {
+            var d = path.join(dest, src[s]);
+            mkdir(d);
+            cmd("node-jscoverage", [ src[s], d ]);
+        }
     }
+    else {
+        cmd("node-jscoverage", src, dest );
+    }    
     
     // TODO I really would like to call the jscoverage from JavaScript,
     // e.g.   cover.processDir(src, dest);
