@@ -56,7 +56,6 @@ function mochaTests ( files, test, coverage, reporter, output ) {
     
     if ( files.directory ) {
         files = findFiles( files.directory, files.files );
-        console.log(files);
     }
     else if ( files.files ) {
         // Now that we re-assigned all of the named parameters
