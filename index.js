@@ -85,9 +85,9 @@ function start(msg) {
         echo (color(line, "blue"));
     }
     else {
-        echo (line);
-        echo (msg);
-        echo (line);
+        echo ("# " + line);
+        echo ("# " + msg);
+        echo ("# " + line);
     }
     echo ("");
 }
