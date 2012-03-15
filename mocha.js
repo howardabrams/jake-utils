@@ -69,6 +69,9 @@ function mochaTests ( files, test, coverage, reporter, output ) {
         args.push(files[file]);
     }
     
-    cmdSync("mocha", args, output);
+    cmd("mocha", args, output);
+    
+    // TODO Use the synchronous version of the cmd to make things wait.
+    // cmdSync("mocha", args, output);
 }
 global['mochaTests'] = mochaTests;

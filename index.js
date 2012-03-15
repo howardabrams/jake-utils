@@ -9,7 +9,7 @@ var tty    = require('tty');
 var cp     = require('child_process');
 var fs     = require('fs');
 var path   = require('path');
-var Sync   = require('sync');
+// var Sync   = require('sync');
 var color = require('ansi-color').set;
 
 require('./mocha');
@@ -195,11 +195,11 @@ function cmdSync(command, args, output) {
     var cmdstr = command + ' ' + args.join(" ");
     console.log(cmdstr);
     
-    Sync(function(){
+    // Sync(function(){
         var opts = {
                 env: process.env
         };
-        cp.exec.sync(null, cmdstr, opts, function(error, stdout, stderr) {
+        cp.exec(null, cmdstr, opts, function(error, stdout, stderr) {
             if (output) {
                 fs.writeFileSync(output, stdout);
             }
@@ -213,6 +213,6 @@ function cmdSync(command, args, output) {
               exit(error.code);
             }
         });
-    });
+    // });
 }
 global['cmdSync'] = cmdSync;
