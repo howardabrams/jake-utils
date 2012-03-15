@@ -11,7 +11,7 @@
         "type": "git",
         "url": "file:///tmp/jake-utils.tar"
     },
-    "devDependencies": {
+    "dependencies": {
         "shelljs": "latest",
         "sync": ">=0.2.0",
         "ansi-color": ">=0.2.1"
