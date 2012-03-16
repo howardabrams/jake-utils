@@ -40,7 +40,7 @@ function jscoverage ( src, dest ) {
         }
     }
     else {
-        cmd("node-jscoverage", src, dest );
+        cmd("node-jscoverage", [ src, dest ] );
     }    
     
     // TODO I really would like to call the jscoverage from JavaScript,
