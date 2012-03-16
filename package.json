@@ -1,7 +1,7 @@
 {
     "name": "jake-utils",
     "description": "Functions for making jake a little nicer",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "private": false,
     "keywords": [
         "jake",
