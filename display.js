@@ -16,16 +16,15 @@ function start(msg) {
     }
     var line = "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-";
     if ( tty.isatty(process.stdout.fd) ) {
-        echo (color(line, "blue"));
-        echo (color(msg,  "blue"));
-        echo (color(line, "blue"));
+        process.stdout.write (      color(line, "blue") + "\n");
+        process.stdout.write (" " + color(msg,  "blue") + "\n");
+        process.stdout.write (      color(line, "blue") + "\n\n");
     }
     else {
-        echo ("# " + line);
-        echo ("# " + msg);
-        echo ("# " + line);
+        process.stdout.write ("# " + line + "\n");
+        process.stdout.write ("#  " + msg + "\n");
+        process.stdout.write ("# " + line + "\n\n");
     }
-    echo ("");
 }
 global['start'] = start;
 
@@ -45,13 +44,13 @@ function end(msg) {
             msg = util.format(msg, arguments[i]);
         }
         if ( tty.isatty(process.stdout.fd) ) {
-            echo ( color(msg, 'bold') );
+            process.stdout.write ( color(msg, 'bold') + "\n");
         }
         else {
-            echo (msg);
+            process.stdout.write (msg + "\n");
         }
     }
-    echo ("");
+    process.stdout.write ("\n");
 }
 global['end'] = end;
 

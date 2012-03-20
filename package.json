@@ -14,7 +14,9 @@
     "dependencies": {
         "shelljs": "latest",
         "jshint": "latest",
-        "ansi-color": ">=0.2.1"
+        "ansi-color": ">=0.2.1",
+        "log4js": "latest",
+        "mocha": "latest"
     },
     "author": "Howard Abrams (http://www.github.com/howardabrams)"
 }
