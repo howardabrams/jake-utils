@@ -9,14 +9,15 @@
     ],
     "repository": {
         "type": "git",
-        "url": "file:///tmp/jake-utils.tar"
+        "url": "git://github.com/howardabrams/jake-utils.git"
     },
     "dependencies": {
         "shelljs": "latest",
         "jshint": "latest",
         "ansi-color": ">=0.2.1",
         "log4js": "latest",
-        "mocha": "latest"
+        "handlebars": ">=1.0.5beta",
+        "github-flavored-markdown": ">= 1.0.0"
     },
     "author": "Howard Abrams (http://www.github.com/howardabrams)"
 }

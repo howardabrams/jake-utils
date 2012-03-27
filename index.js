@@ -10,3 +10,4 @@ require('./mocha');
 require('./jscoverage');
 require('./lint');
 require('./cmd');
+require('./markdown');
