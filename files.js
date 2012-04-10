@@ -2,6 +2,14 @@ var path   = require('path');
 var fs     = require('fs');
 var util   = require('util');
 
+var file = {
+        all: filesAll,
+        find: findFiles,
+        write: createFile,
+        create: createFile
+};
+global['file'] = file;
+
 /**
  * Gathers up a list of files and returns them in an array.
  * 
@@ -33,7 +41,7 @@ global['files'] = files;
 function filesAll(fileglob) {
     return keysToArray ( ls('-R', fileglob) );
 }
-global['allFiles'] = files;
+global['allFiles'] = filesAll;
 
 
 /**
@@ -78,7 +86,19 @@ function findFiles2(directory, pattern) {
 }
 global['findFiles'] = findFiles;
 
-
+function createFile(filename, data, callback) {
+    if ( typeof data == 'object' ) {
+        data = JSON.stringify(data, null, 3);
+    }
+    fs.writeFile(filename, data, function( err ) {
+        if (err) {
+            throw err;
+        }
+        if (callback) {
+            callback();
+        }
+    });
+}
 
 /**
  * Creates an array from the keys (property names) of an object.

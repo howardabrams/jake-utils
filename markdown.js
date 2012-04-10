@@ -29,8 +29,8 @@ var ghm        = require("github-flavored-markdown");
 function markdown( input, output, options ) {
     // console.log(handlebars);
     
-    var header = fs.readFileSync('markdown-header.html', 'utf8');
-    var template = handlebars.compile(header);
+    var tmplFile = fs.readFileSync(__dirname + '/markdown-template.html', 'utf8');
+    var template = handlebars.compile(tmplFile);
     
     var data = fs.readFileSync(input, 'utf8');
     var model = {

@@ -11,3 +11,4 @@ require('./jscoverage');
 require('./lint');
 require('./cmd');
 require('./markdown');
+require('./project');
