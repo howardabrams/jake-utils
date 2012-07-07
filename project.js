@@ -65,7 +65,7 @@ function getProjectDir(directory) {
     if ( directory ) {
         var pp = path.join(directory, 'package.json');
         // console.log("Analyzing", pp);
-        if ( path.existsSync(pp) ) {
+        if ( fs.existsSync(pp) ) {
             return directory;
         }
         else {
