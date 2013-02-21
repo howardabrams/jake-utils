@@ -13,7 +13,7 @@ var fs = require('fs'),
  * @param {String} [format]
  * @return {String} today
  */
-function today (format) {
+function getToday (format) {
     var date = new Date();
     return dateable.format(date, format || 'YYYY-MM-DD');
 }
@@ -24,12 +24,12 @@ function today (format) {
  * @return {String} version
  * @throws {Error}
  */
-function version() {
-    var v = pkg().version;
-    if (!v) {
+function getVersion() {
+    var version = getPackage().version;
+    if (!version) {
         throw new Error('No version found in package.json');
     }
-    return v;
+    return version;
 }
 
 /**
@@ -38,13 +38,13 @@ function version() {
  * @return {Object} package
  * @throws {Error}
  */
-function pkg() {
+function getPackage() {
     return JSON.parse(read('./package.json'));
 }
 
 // exports
 module.exports = exports = {
-    today: today,
-    version: version,
-    pkg: pkg
+    getToday: getToday,
+    getVersion: getVersion,
+    getPackage: getPackage
 };

@@ -14,8 +14,8 @@ var fs = require('fs'),
  *             {pattern: '@@version', replacement: '1.4.0'}
  *         },
  *         src: [
- *          'file1.js',
- *          'file2.js'
+ *          'main.js',
+ *          'other/*.js'
  *         ]
  *     });
  *

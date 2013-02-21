@@ -11,8 +11,11 @@ var fs = require('fs'),
  *         src:  [
  *             './lib/mylibrary.js'
  *         ],
- *         dest: './lib/mylibrary.min.js',
- *         header: '// license information...'
+ *         dest: './lib/mylibrary.min.js',       // optional
+ *         options: {},                          // uglify-js options. optional
+ *         header: '// license information...',  // optional
+ *         separator: '\n',                      // optional
+ *         footer: '// the end...'               // optional
  *     });
  *
  * @param {Object} params  Object containing:
@@ -32,7 +35,7 @@ var fs = require('fs'),
  * @return {Object} res    Result information. The object contains:
  *                         {String[]} src       List with the filenames of the
  *                                              files which are minified
- *                         {String} code        The contents of the concatenated
+ *                         {String} code        The contents of the minified
  *                                              file.
  */
 function minify (params) {

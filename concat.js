@@ -13,8 +13,10 @@ var fs = require('fs'),
  *             './src/extra.js',
  *             './src/functions/**',
  *         ],
- *         dest: './lib/mylibrary.js',
- *         header: '// license information...'
+ *         dest: './lib/mylibrary.js',           // optional
+ *         header: '// license information...',  // optional
+ *         separator: '\n',                      // optional
+ *         footer: '// the end...'               // optional
  *     });
  *
  * @param {Object} params  Object containing:
