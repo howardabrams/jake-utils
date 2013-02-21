@@ -149,8 +149,8 @@ patterns. Example:
 
         var result = replace({
             replacements: [
-                {pattern: '@@date',    replacement: today()},
-                {pattern: '@@version', replacement: version()}  // version from package.json
+                {pattern: '@@date',    replacement: getToday()},
+                {pattern: '@@version', replacement: getVersion()}
             },
             src: [
              'main.js',
