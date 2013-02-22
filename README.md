@@ -149,8 +149,8 @@ patterns. Example:
 
         var result = replace({
             replacements: [
-                {pattern: '@@date',    replacement: getToday()},
-                {pattern: '@@version', replacement: getVersion()}
+                {pattern: '@@date',    replacement: today()},
+                {pattern: '@@version', replacement: version()}
             },
             src: [
              'main.js',
@@ -172,10 +172,8 @@ Utility functions
 
 Other utility methods are:
 
-    var pkg = getPackage();      // package.json contents
-    var version = getVersion();  // version number from package.json
-    var today = getToday();      // formatted date of today
-    var data = read(filename);   // read data (fs.readFileSync)
-    write(filename, data);       // write data (fs.writeFileSync)
-
-
+    var p = pkg();              // package.json contents
+    var v = version();          // version number from package.json
+    var d = today();            // formatted date of today
+    var data = read(filename);  // read data (fs.readFileSync)
+    write(filename, data);      // write data (fs.writeFileSync)
