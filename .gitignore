@@ -1,4 +1,5 @@
 .project
 .settings
+.idea
 node_modules
 /README.html

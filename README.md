@@ -72,3 +72,108 @@ the files found in the directories specified. For example:
     });
     
   [4]: https://github.com/jshint/node-jshint/
+
+
+Concatenate files
+--------------------------
+
+The method `concat` is available to concatenate multiple files into one.
+The method resolves patterns in filenames, and has options to add a header,
+separators, and a footer to the concatenated file. Example:
+
+    desc("Concatenates all source files into library");
+    task('concat', function(){
+        start("Concatenating the source files");
+
+        var result = concat({
+            src: [
+                './src/main.js',
+                './src/extra.js',
+                './src/functions/**',
+            ],
+            dest: './lib/mylibrary.js',           // optional
+            header: '// license information...',  // optional
+            separator: '\n',                      // optional
+            footer: '// the end...'               // optional
+        });
+
+        // returned result is an object containing:
+        //     {String} code   The concatenated data
+        //     {String} src    The list with resolved filenames
+
+        end();
+    });
+
+
+Minify using uglify-js
+--------------------------
+
+The method `minify` is available to minify a source file using [uglify-js][5].
+The method accepts one source file, or an array with multiple source files, and
+resolves patterns in the filenames. Example:
+
+    desc("Minify the library");
+    task('minify', function(){
+        start("Minifying library");
+
+        var result = minify({
+            src:  './lib/mylibrary.js',
+            dest: './lib/mylibrary.min.js',       // optional
+            options: {},                          // uglify-js options. optional
+            header: '// license information...',  // optional
+            separator: '\n',                      // optional
+            footer: '// the end...'               // optional
+        });
+
+        // returned result is an object containing:
+        //     {String} code   The concatenated data
+        //     {String} src    The list with resolved filenames
+
+        end();
+    });
+
+  [5]: https://github.com/mishoo/UglifyJS2
+
+
+Replace patterns in files
+--------------------------
+
+The method `replace` can be used to replace patterns in files, for example to
+fill in today's date or the version number of the package. The patterns can
+be a string or a regular expression. The list with source files can contain
+patterns. Example:
+
+    desc("Replace version and date in source files");
+    task('replace', function(){
+        start("Replace version and date in source files");
+
+        var result = replace({
+            replacements: [
+                {pattern: '@@date',    replacement: today()},
+                {pattern: '@@version', replacement: version()}
+            },
+            src: [
+             'main.js',
+             'other/*.js'
+            ]
+        });
+
+        // returned result is an object containing:
+        //     {String} src    The list with resolved filenames
+
+        end();
+    });
+
+  [5]: https://github.com/mishoo/UglifyJS2
+
+
+Utility functions
+--------------------------
+
+Other utility methods are:
+
+    var p = pkg();              // package.json contents
+    var v = version();          // version number from package.json
+    var d = today();            // formatted date of today
+    var data = read(filename);  // read data (fs.readFileSync)
+    write(filename, data);      // write data (fs.writeFileSync)
