@@ -53,7 +53,7 @@ function minify (params) {
     }
 
     var code = '';
-    var separator = String(params.separator) || '';
+    var separator = params.separator ? String(params.separator) : '';
     var options = params.options || {};
 
     // header
