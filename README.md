@@ -1,8 +1,9 @@
 The `jake-utils` is a collection of useful functions for using [Jake][3].
 
-**Note:** I do not expect any one else to find it as useful. It does a
-lot of un-orthodox things like creating global functions and attempting
-to make everything run synchronously.
+**Note:** As a package, it does un-orthodox things like creating
+global functions and attempting to make everything run synchronously.
+This design decision was made in order to be consistent with Jake, and
+behave similarly to a "build system".
 
   [3]: https://github.com/isaacs/node-jake
   
