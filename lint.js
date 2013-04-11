@@ -1,4 +1,4 @@
-var hint   = require('jshint/lib/hint');
+var hint   = require('jshint');
 
 /**
  * Runs all JavaScript files located in the `code` directory through
