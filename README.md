@@ -105,6 +105,21 @@ separators, and a footer to the concatenated file. Example:
         end();
     });
 
+Markdown File Conversion
+------------------------
+
+The `markdown` function converts a markdown-formatted file into an HTML file using the
+[marked parser](https://github.com/chjj/marked).
+
+    desc("Converts README into HTML File);
+    task('readme', function(){
+        start("Converting the README into a web page");
+        markdown( "README.md", "pub/README.html");
+        end();
+    });
+
+The function takes an optional third parameter for `marked`-specific options.
+
 
 Minify using uglify-js
 --------------------------
